@@ -23,8 +23,5 @@ def returnbirb():
     dailyBirb = birbs[str(birbIndex)]
     return render_template("index.html", imgurl=dailyBirb["imageurl"], name=dailyBirb["name"], family=dailyBirb["family"], url=dailyBirb["url"])
 
-def run():
-    app.run(host="0.0.0.0", port=80)
-
 if __name__ == "__main__":
-    run()
+    app.run()
