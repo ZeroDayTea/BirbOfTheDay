@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 import random
 import json
@@ -22,6 +22,23 @@ def returnbirb():
     birbs = json.load(birbfile)
     dailyBirb = birbs[str(birbIndex)]
     return render_template("index.html", imgurl=dailyBirb["imageurl"], name=dailyBirb["name"], family=dailyBirb["family"], url=dailyBirb["url"])
+
+@app.route('/addemail', methods=['POST'])
+def addemail():
+    if request.method == 'POST':
+        email = request.form.get("email")
+        if email is None or email == "":
+            data = {"Message": "Error: email not provided"}
+            return jsonify(data)
+        else:
+            print(json.dumps(request.form))
+            # add individual's email to daily email list
+            emailFile = open("emails.txt", "a")
+            emailFile.write("\n")
+            emailFile.write(email)
+            emailFile.close()
+            data = {"Message": "Success"}
+            return jsonify(data)
 
 if __name__ == "__main__":
     app.run()
