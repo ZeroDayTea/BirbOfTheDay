@@ -28,7 +28,7 @@ def addemail():
     if request.method == 'POST':
         email = request.form.get("email")
         if email is None or email == "":
-            data = {"Message": "Error: email not provided"}
+            data = {"message": "Error: email not provided"}
             return jsonify(data)
         else:
             print(json.dumps(request.form))
@@ -37,7 +37,7 @@ def addemail():
             emailFile.write("\n")
             emailFile.write(email)
             emailFile.close()
-            data = {"Message": "Success"}
+            data = {"message": "Success!"}
             return jsonify(data)
 
 if __name__ == "__main__":

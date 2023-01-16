@@ -11,11 +11,57 @@
         body {
             background-image: linear-gradient(90deg, #e66465, #9198e5);
         }
+
+        .login-logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#emailForm').on('submit', function(e){
+                e.preventDefault();
+                var email = $('#email').val();
+                $.ajax({
+                    url: '/addemail',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {"email": email},
+                    success: function(response){
+                        var res = response.message;
+                        if(res == "Success!") {
+                            res = "You have successfully subscribed to Daily Birb emails!";
+                            document.getElementById("message").style.color = "green";
+                            document.getElementById("message").innerHTML = res;
+                            document.getElementById("emailForm").reset();
+                        }
+                        else {
+                            document.getElementById("message").style.color = "red";
+                            document.getElementById("message").innerHTML = res;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-sm-9 col-md-7 col-lg-6 mx-auto">
+                <div class="col-sm-9 col-md-7 col-lg-8 mx-auto">
+                    <div class="card card-signin my-5">
+                        <div class="card-body">
+                            <br>
+                            <h2 class="card-title text-center">Today's Birb Of The Day Is</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-9 col-md-7 col-lg-7 mx-auto">
                     <div class="card card-signin my-5">
                         <div class="card-body">
                             <br>
@@ -24,7 +70,7 @@
                             {% endif %}
                             <br><br>
                             {% if imgurl %}
-                            <img src="{{imgurl}}">
+                            <img src="{{imgurl}}" class="login-logo">
                             {% endif %}
                             <br>
                             <div class="text-center">
@@ -35,6 +81,26 @@
                                 <a href="{{url}}" target="_blank">Learn more</a>
                                 {% endif %} 
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-9 col-md-7 col-lg-7 mx-auto">
+                    <div class="card card-signin my-5">
+                        <div class="card-body">
+                            <br>
+                            <h5 class="card-title text-center">Subscribe to Daily Birb emails!</h5>
+                            <br>
+                            <form id="emailForm" name="emailForm" class="form-signin">
+                                <div class="form-label-group">
+                                    <input type="text" id="email" name="email" class="form-control" placeholder="Email" required>
+                                </div>
+                                <br>
+                                <input class="btn btn-lg btn-info btn-block text-uppercase" type="submit" value="Submit"></input>
+                                <br>
+                                <p id="message" name="message" class="card-title text-center"></p>
+                            </form>
                         </div>
                     </div>
                 </div>
