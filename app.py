@@ -103,6 +103,11 @@ def addemail():
             print(json.dumps(request.form))
             # add individual's email to daily email list
             emailFile = open("emails.txt", "a")
+            emailsList = emailFile.read()
+            emailsList = emailsList.split("\n")
+            if email in emailsList:
+                data = {"message": "Error: email already subscribed"}
+                return jsonify(data)
             emailFile.write("\n")
             emailFile.write(email)
             emailFile.close()
