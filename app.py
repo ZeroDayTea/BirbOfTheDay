@@ -65,6 +65,9 @@ def mass_email():
     
     today = datetime.now().strftime("%B %d, %Y")
 
+    # retrieve map information
+    mapsImage = data.split('maps-range">')[1].split('</a>')[0]
+
     # send email to each individual
     for email in emails:
         send_email(email.strip(), dailyBirb["imageurl"], dailyBirb["name"], today, description, dailyBirb["url"], fact1, fact2, fact3, fact4, fact5)
