@@ -52,11 +52,16 @@ def mass_email():
     emails = emailFile.readlines()
     
     # some webscraping to get facts and description from page
-    res = requests.get(dailyBirb["url"])
+    print(dailyBirb["url"])
+    url = dailyBirb["url"]
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:107.0) Gecko/20100101 Firefox/107.0'}
+    res = requests.get(url, headers=headers)
     data = res.text
+    data = data.replace("\n", "")
     description = data.split('Description</h2><p>')[1].split('</p>')[0]
 
     factsSection = data.split('Cool Facts')[1].split('</div></section>')[0]
+    factsSection = factsSection.replace("\n", "")
     fact1 = factsSection.split('<ul><li>')[1].split('</li>')[0]
     fact2 = factsSection.split('</li><li>')[1].split('</li>')[0]
     fact3 = factsSection.split('</li><li>')[2].split('</li>')[0]
@@ -70,7 +75,7 @@ def mass_email():
 
     # send email to each individual
     for email in emails:
-        send_email(email.strip(), dailyBirb["imageurl"], dailyBirb["name"], today, description, dailyBirb["url"], fact1, fact2, fact3, fact4, fact5)
+        send_email(email.strip(), dailyBirb["imageurl"], dailyBirb["name"], today, description, url, fact1, fact2, fact3, fact4, fact5)
     
 # run mass email every day at 12:00 AM using APScheduler
 scheduler = BackgroundScheduler()
