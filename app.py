@@ -6,6 +6,7 @@ import json
 import requests
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -58,15 +59,15 @@ def mass_email():
     res = requests.get(url, headers=headers)
     data = res.text
     data = data.replace("\n", "")
-    description = data.split('Description</h2><p>')[1].split('</p>')[0]
+    description = BeautifulSoup(data.split('Description</h2><p>')[1].split('</p>')[0], 'lxml').text
 
     factsSection = data.split('Cool Facts')[1].split('</div></section>')[0]
     factsSection = factsSection.replace("\n", "")
-    fact1 = factsSection.split('<ul><li>')[1].split('</li>')[0]
-    fact2 = factsSection.split('</li><li>')[1].split('</li>')[0]
-    fact3 = factsSection.split('</li><li>')[2].split('</li>')[0]
-    fact4 = factsSection.split('</li><li>')[3].split('</li>')[0]
-    fact5 = factsSection.split('</li><li>')[4].split('</li>')[0]
+    fact1 = BeautifulSoup(factsSection.split('<ul><li>')[1].split('</li>')[0], 'lxml').text
+    fact2 = BeautifulSoup(factsSection.split('</li><li>')[1].split('</li>')[0], 'lxml').text
+    fact3 = BeautifulSoup(factsSection.split('</li><li>')[2].split('</li>')[0], 'lxml').text
+    fact4 = BeautifulSoup(factsSection.split('</li><li>')[3].split('</li>')[0], 'lxml').text
+    fact5 = BeautifulSoup(factsSection.split('</li><li>')[4].split('</li>')[0], 'lxml').text
     
     today = datetime.now().strftime("%B %d, %Y")
 
@@ -115,4 +116,5 @@ def addemail():
             return jsonify(data)
 
 if __name__ == "__main__":
+    mass_email()
     app.run()
